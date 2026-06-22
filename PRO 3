@@ -1,0 +1,55 @@
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.preprocessing import LabelEncoder
+
+# Training Data
+data = {
+    'Outlook': ['Sunny', 'Sunny', 'Overcast', 'Rain', 'Rain',
+                'Rain', 'Overcast', 'Sunny', 'Sunny', 'Rain',
+                'Sunny', 'Overcast', 'Overcast', 'Rain'],
+    'Temperature': ['Hot', 'Hot', 'Hot', 'Mild', 'Cool',
+                    'Cool', 'Cool', 'Mild', 'Cool', 'Mild',
+                    'Mild', 'Mild', 'Hot', 'Mild'],
+    'Humidity': ['High', 'High', 'High', 'High', 'Normal',
+                 'Normal', 'Normal', 'High', 'Normal', 'Normal',
+                 'Normal', 'High', 'Normal', 'High'],
+    'Wind': ['Weak', 'Strong', 'Weak', 'Weak', 'Weak',
+             'Strong', 'Strong', 'Weak', 'Weak', 'Weak',
+             'Strong', 'Strong', 'Weak', 'Strong'],
+    'PlayTennis': ['No', 'No', 'Yes', 'Yes', 'Yes',
+                   'No', 'Yes', 'No', 'Yes', 'Yes',
+                   'Yes', 'Yes', 'Yes', 'No']
+}
+
+# Convert data to DataFrame
+import pandas as pd
+df = pd.DataFrame(data)
+
+# Encode categorical values
+le = LabelEncoder()
+
+X = df.iloc[:, :-1].apply(le.fit_transform)
+y = LabelEncoder().fit_transform(df['PlayTennis'])
+
+# Build ID3 Decision Tree
+clf = DecisionTreeClassifier(criterion='entropy')
+clf.fit(X, y)
+
+# New Sample
+new_sample = pd.DataFrame({
+    'Outlook': ['Sunny'],
+    'Temperature': ['Cool'],
+    'Humidity': ['High'],
+    'Wind': ['Strong']
+})
+
+# Encode new sample
+for col in new_sample.columns:
+    new_sample[col] = LabelEncoder().fit(df[col]).transform(new_sample[col])
+
+# Prediction
+prediction = clf.predict(new_sample)
+
+if prediction[0] == 1:
+    print("Prediction: Yes (Play Tennis)")
+else:
+    print("Prediction: No (Do Not Play Tennis)")
