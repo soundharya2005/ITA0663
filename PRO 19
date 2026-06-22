@@ -1,0 +1,9 @@
+from sklearn.naive_bayes import GaussianNB
+
+X=[[25,30000],[35,60000],[45,80000]]
+y=['No','Yes','Yes']
+
+model=GaussianNB()
+model.fit(X,y)
+
+print(model.predict([[30,50000]]))
