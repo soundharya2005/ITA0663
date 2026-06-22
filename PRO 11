@@ -1,0 +1,9 @@
+from sklearn.tree import DecisionTreeClassifier
+
+X = [[25,30000],[35,50000],[45,80000]]
+y = ['Low','Medium','High']
+
+model = DecisionTreeClassifier()
+model.fit(X,y)
+
+print(model.predict([[40,60000]]))
